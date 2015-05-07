@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>Реверс APK на примере несложной малвари</title>
+    <!--[if lte IE 8]>
+    <script src="/css/ie/html5shiv.js"></script><![endif]-->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.dropotron.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.onvisible.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/skel-layers.min.js"></script>
+    <script src="/js/init.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="/css/skel.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/style-desktop.css"/>
+        <link rel="stylesheet" href="/css/style-noscript.css"/>
+    </noscript>
+</head>
+
+<body class="no-sidebar">
+<!-- Header -->
+<div id="header">
+
+    <!-- Inner -->
+    <div class="inner">
+        <header>
+            <h1><a href="/index.html" id="logo">PrimankaDEN</a></h1>
+        </header>
+    </div>
+
+    <!-- Nav -->
+<nav id="nav">
+    <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/ctf.html">CTF</a></li>
+        <li><a href="/about.html">About</a></li>
+    </ul>
+</nav>
+
+</div>
+
+<div class="wrapper style1">
+    <div class="container">
+        <!-- Main -->
+<header>
+    <h2 class="post-title">Реверс APK на примере несложной малвари</h2>
+
+    <h1><p class="post-meta">May 8, 2015</p></h1>
+</header>
+<p>Вредоносный код для мобильных устройств часто рассматривается как миф из-за ограничений аппаратного и программного обеспечения. 
+Тем не менее, история показывает, что мобильные устройства также подвержены такого рода угрозам.
+Рассмотрим исследование вредоносного кода на примере приложения iCalendar для мобильной операционной системы Android. Это приложение, полученное в формате APK, было найдено на одном из сайтов, распространяющих “варезное” ПО. 
+Формат Android Package (APK) представляет собой незашифрованный архив, содержащий в себе метаинформацию о приложении, байт код, а также медиаресурсы (иконки, строки, xml разметки). Для получения доступа к этим файлам воспользуемся утилитой apktools, распространяемой бесплатно, запустив ее с параметром -d.  После исполнения программы, получим следующую директорию, показанную на рисунке 1.</p>
+
+<p><a href="#" class="image fill"><img src="/files/andr_01.png" alt="" /></a></p>
+
+<p>Рисунок 1. Директория с распакованным APK</p>
+
+<p>В первую очередь нас интересует файл AndroidManifest.xml. В нем содержится вся необходимая для системы служебная информация. К ней относятся список Activity (экранов приложения), сервисов и широковещательных каналов. Но в прежде всего нас интересуют разрешения (permission), которые необходимо прописать в AndroidManifest, чтобы использовать те или иные возможности операционной системы. Открыв AndroidManifest, мы увидим следующие строки:</p>
+
+<p>&lt;uses-permission android:name=”android.permission.INTERNET”/&gt;<br />
+&lt;uses-permission android:name=”android.permission.ACCESS_COARSE_LOCATION”/&gt;<br />
+&lt;uses-permission android:name=”android.permission.RESTART_PACKAGES”/&gt;<br />
+&lt;uses-permission android:name=”android.permission.RECEIVE_SMS”/&gt;<br />
+&lt;uses-permission android:name=”android.permission.SEND_SMS”/&gt;<br />
+&lt;uses-permission android:name=”android.permission.SET_WALLPAPER”/&gt;<br /></p>
+
+<p>Если объяснить необходимость доступа к календарю и интернету еще представляется возможным, то чтение и отправка SMS-сообщений совершенно не входят в обязанности приложения-календаря. Таким образом, взглянув на содержимое файла AndroidManifest, мы достаточно точно представляем, что нужно искать в коде.
+Теперь перейдем непосредственно к коду. Как правило, приложения для Android создаются с использованием языка Java, код которого компилируется в dex-файлы. Такие файлы легко поддаются декомпиляции. Получить исходный код приложения можно в два этапа. Сперва воспользуемся утилитой dex2jar, передав ей в качестве параметра путь до APK файла. После ее применения получаем файл вида &lt;apk_name&gt;_dex2jar.jar. Файл JAR (Java ARchive) — это архив, в котором содержится часть программы на языке JAVA. Второй этап декомпиляции – вытащить исходный код из фала jar. В этом поможет утилита Java Decompiler, которая после завершения работы выдаст директорию с исходным кодом проекта. Директория будет иметь вид, представленный на рисунке 2.</p>
+
+<p><a href="#" class="image fill"><img src="/files/andr_02.png" alt="" /></a></p>
+
+<p>Рисунок 2. Директория с исходным кодом после декомпиляции</p>
+
+<p>По названию файлов (а именно a.java, aa.java и т.д.) мы можем предположить, что исходный код был обфусцирован. Такой обфускатор, предоставляемый вместе с Android SDK, меняет имена файлов, классов и методов, чтобы усложнить понимание работы программы при ее исследовании. Поскольку разработка для системы Android является Framework-ориентированной, имена классов и методов системных библиотек не будут меняться при обфускации. Эта особенность позволяет нам искать код, который имеет интересующую нас функциональность. 
+    Учитывая строки, которые мы видели в файле AndroidManifest,  воспользуемся поиском по именам методов и классов. Будем искать классы, связанные с SMS, а именно класс SMSManager, описанный в документации к Android SDK.  Результаты, полученные после поиска по ключевому слову “sms”, показаны на рисунке 3.</p>
+
+<p><a href="#" class="image fill"><img src="/files/andr_03.png" alt="" /></a></p>
+
+<p>Рисунок 3. Результаты поиска по слову “sms”</p>
+
+<p>Посмотрим содержимое файла iCalendar.java. Мы увидим, что он унаследован от класса Activity. Это объясняет, почему имя класса осталось неизменным после обфускации. Все классы-activity прописываются в файле AndroidManifest, а значит обфускатор не может изменить их имена, не вызвав ошибки компиляции. 
+Вернемся к анализу кода. Автор приложения никак не маскирует вредоносный код. В данном случае мы видим использование функции sendTextMessage(), принимающую в качестве параметров, кроме всего прочего, номер получателя и текст сообщения.</p>
+
+<p><a href="#" class="image fill"><img src="/files/andr_04.png" alt="" /></a> </p>
+
+<p>Рисунок 4. Фрагмент вредоносного кода.</p>
+
+<p>Анализируя фрагмент, представленный на рисунке 4, можно смело утверждать, что за отправку SMS сообщения на указанный в параметрах метода номер телефона со счета абонента будет списана неприлично большая сумма. Отсюда вытекает способ монетизации, используемый автором приложения. Ничего не подозревающий пользователь скачивает приложение-календарь, которое без его ведома отправляет SMS, принося деньги в карман разработчика. 
+Такой вид вредоносного ПО получил широкое распространение, поскольку создается за короткое время, не требует каких-либо затрат и специальных знаний. Однако существенным недостатком такого метода является тот факт, что перед установкой операционная система запросит у пользователя разрешение на весь функционал, прописанный в файле AndroidManifest. Отсюда следует вывод, что метод рассчитан прежде всего на невнимательного пользователя, не читающего предупреждений, любезно предоставленных разработчиками операционной системы Android.</p>
+
+
+
+    </div>
+</div>
+<!-- Footer -->
+<div id="footer">
+    <!-- Contact -->
+    <section class="contact">
+        <ul class="icons">
+            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+            <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+            <li><a href="" class="icon fa-linkedin"><span class="label">Linkedin</span></a></li>
+        </ul>
+    </section>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <ul class="menu">
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            <li>&copy;2015 PrimankaDEN</li>
+            <li><a href="https://github.com/PrimankaDEN/primankaden.github.io.git">Source</a></li>
+            <li><a href="/feed.xml">via RSS</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>Volga CTF. Stego400 - right up</title>
+    <!--[if lte IE 8]>
+    <script src="/css/ie/html5shiv.js"></script><![endif]-->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.dropotron.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.onvisible.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/skel-layers.min.js"></script>
+    <script src="/js/init.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="/css/skel.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/style-desktop.css"/>
+        <link rel="stylesheet" href="/css/style-noscript.css"/>
+    </noscript>
+</head>
+
+<body class="no-sidebar">
+<!-- Header -->
+<div id="header">
+
+    <!-- Inner -->
+    <div class="inner">
+        <header>
+            <h1><a href="/index.html" id="logo">PrimankaDEN</a></h1>
+        </header>
+    </div>
+
+    <!-- Nav -->
+<nav id="nav">
+    <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/ctf.html">CTF</a></li>
+        <li><a href="/about.html">About</a></li>
+    </ul>
+</nav>
+
+</div>
+
+<div class="wrapper style1">
+    <div class="container">
+        <!-- Main -->
+<header>
+    <h2 class="post-title">Volga CTF. Stego400 - right up</h2>
+
+    <h1><p class="post-meta">May 8, 2015</p></h1>
+</header>
+<p>Task:<br />
+There must be a hidden message somewhere.<br />
+Hints:<br />
+   * 2 bpp. That’s incredible.<br />
+   * 2x3 matrix embedding.<br />
+   * Jessica Fridrich would solve this task easily.<br /></p>
+
+<p><a href="#" class="image fill"><img src="/files/volgactf_stego400_lsb.png" alt="" /></a>
+<br /></p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">Image</span>
+<span class="k">def</span> <span class="nf">tlsb</span><span class="p">():</span>
+    <span class="n">allData</span> <span class="o">=</span><span class="s">&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;stego.png&#39;</span><span class="p">)</span>
+    <span class="n">im</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&quot;RGB&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="p">)</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">bi</span> <span class="o">=</span><span class="mi">0</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">3121</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">bi</span><span class="o">+=</span><span class="mi">2</span>
+            <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+            <span class="n">c0</span> <span class="o">=</span> <span class="n">r</span> <span class="o">%</span> <span class="mi">2</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="n">g</span> <span class="o">%</span> <span class="mi">2</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="mi">2</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">c0</span><span class="o">+</span><span class="n">c1</span><span class="p">)</span> <span class="o">%</span><span class="mi">2</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">c1</span><span class="o">+</span><span class="n">c2</span><span class="p">)</span> <span class="o">%</span><span class="mi">2</span>
+            <span class="n">data</span><span class="o">+=</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">+=</span><span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">bi</span> <span class="o">==</span> <span class="mi">8</span><span class="p">):</span>
+                <span class="n">k</span><span class="o">-=</span><span class="mi">1</span>
+                <span class="n">allData</span><span class="o">+=</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">data</span><span class="o">=</span><span class="s">&#39;&#39;</span>
+                <span class="n">bi</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">print</span> <span class="n">allData</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;flag.png&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">allData</span><span class="p">)</span>
+<span class="n">tlsb</span><span class="p">()</span></code></pre></div>
+
+<p><br />
+Result:<br />
+<a href="#" class="image fill"><img src="/files/volgactf_stego400_result.png" alt="" /></a></p>
+
+
+    </div>
+</div>
+<!-- Footer -->
+<div id="footer">
+    <!-- Contact -->
+    <section class="contact">
+        <ul class="icons">
+            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+            <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+            <li><a href="" class="icon fa-linkedin"><span class="label">Linkedin</span></a></li>
+        </ul>
+    </section>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <ul class="menu">
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            <li>&copy;2015 PrimankaDEN</li>
+            <li><a href="https://github.com/PrimankaDEN/primankaden.github.io.git">Source</a></li>
+            <li><a href="/feed.xml">via RSS</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

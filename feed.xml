@@ -6,30 +6,117 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 03 Mar 2015 21:07:27 +0300</pubDate>
-    <lastBuildDate>Tue, 03 Mar 2015 21:07:27 +0300</lastBuildDate>
+    <pubDate>Fri, 08 May 2015 01:43:58 +0300</pubDate>
+    <lastBuildDate>Fri, 08 May 2015 01:43:58 +0300</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+        <title>Volga CTF. Stego400 - right up</title>
+        <description>&lt;p&gt;Task:&lt;br /&gt;
+There must be a hidden message somewhere.&lt;br /&gt;
+Hints:&lt;br /&gt;
+   * 2 bpp. That’s incredible.&lt;br /&gt;
+   * 2x3 matrix embedding.&lt;br /&gt;
+   * Jessica Fridrich would solve this task easily.&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_lsb.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;
+&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Image&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tlsb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;allData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;stego.png&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RGB&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;bi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3121&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;bi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getpixel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;c0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;c1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;c2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;allData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;chr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;bi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;allData&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;flag.png&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;allData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tlsb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Tom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &amp;#39;Hi, Tom&amp;#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;
+Result:&lt;br /&gt;
+&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_result.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 08 May 2015 03:37:10 +0300</pubDate>
+        <link>http://yourdomain.com/jekyll/update/2015/05/08/volgactf-stego-400.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/05/08/volgactf-stego-400.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Реверс APK на примере несложной малвари</title>
+        <description>&lt;p&gt;Вредоносный код для мобильных устройств часто рассматривается как миф из-за ограничений аппаратного и программного обеспечения. 
+Тем не менее, история показывает, что мобильные устройства также подвержены такого рода угрозам.
+Рассмотрим исследование вредоносного кода на примере приложения iCalendar для мобильной операционной системы Android. Это приложение, полученное в формате APK, было найдено на одном из сайтов, распространяющих “варезное” ПО. 
+Формат Android Package (APK) представляет собой незашифрованный архив, содержащий в себе метаинформацию о приложении, байт код, а также медиаресурсы (иконки, строки, xml разметки). Для получения доступа к этим файлам воспользуемся утилитой apktools, распространяемой бесплатно, запустив ее с параметром -d.  После исполнения программы, получим следующую директорию, показанную на рисунке 1.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://github.com/jekyll/jekyll-help&quot;&gt;Jekyll’s dedicated Help repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/andr_01.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Рисунок 1. Директория с распакованным APK&lt;/p&gt;
+
+&lt;p&gt;В первую очередь нас интересует файл AndroidManifest.xml. В нем содержится вся необходимая для системы служебная информация. К ней относятся список Activity (экранов приложения), сервисов и широковещательных каналов. Но в прежде всего нас интересуют разрешения (permission), которые необходимо прописать в AndroidManifest, чтобы использовать те или иные возможности операционной системы. Открыв AndroidManifest, мы увидим следующие строки:&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;uses-permission android:name=”android.permission.INTERNET”/&amp;gt;&lt;br /&gt;
+&amp;lt;uses-permission android:name=”android.permission.ACCESS_COARSE_LOCATION”/&amp;gt;&lt;br /&gt;
+&amp;lt;uses-permission android:name=”android.permission.RESTART_PACKAGES”/&amp;gt;&lt;br /&gt;
+&amp;lt;uses-permission android:name=”android.permission.RECEIVE_SMS”/&amp;gt;&lt;br /&gt;
+&amp;lt;uses-permission android:name=”android.permission.SEND_SMS”/&amp;gt;&lt;br /&gt;
+&amp;lt;uses-permission android:name=”android.permission.SET_WALLPAPER”/&amp;gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Если объяснить необходимость доступа к календарю и интернету еще представляется возможным, то чтение и отправка SMS-сообщений совершенно не входят в обязанности приложения-календаря. Таким образом, взглянув на содержимое файла AndroidManifest, мы достаточно точно представляем, что нужно искать в коде.
+Теперь перейдем непосредственно к коду. Как правило, приложения для Android создаются с использованием языка Java, код которого компилируется в dex-файлы. Такие файлы легко поддаются декомпиляции. Получить исходный код приложения можно в два этапа. Сперва воспользуемся утилитой dex2jar, передав ей в качестве параметра путь до APK файла. После ее применения получаем файл вида &amp;lt;apk_name&amp;gt;_dex2jar.jar. Файл JAR (Java ARchive) — это архив, в котором содержится часть программы на языке JAVA. Второй этап декомпиляции – вытащить исходный код из фала jar. В этом поможет утилита Java Decompiler, которая после завершения работы выдаст директорию с исходным кодом проекта. Директория будет иметь вид, представленный на рисунке 2.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/andr_02.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Рисунок 2. Директория с исходным кодом после декомпиляции&lt;/p&gt;
+
+&lt;p&gt;По названию файлов (а именно a.java, aa.java и т.д.) мы можем предположить, что исходный код был обфусцирован. Такой обфускатор, предоставляемый вместе с Android SDK, меняет имена файлов, классов и методов, чтобы усложнить понимание работы программы при ее исследовании. Поскольку разработка для системы Android является Framework-ориентированной, имена классов и методов системных библиотек не будут меняться при обфускации. Эта особенность позволяет нам искать код, который имеет интересующую нас функциональность. 
+    Учитывая строки, которые мы видели в файле AndroidManifest,  воспользуемся поиском по именам методов и классов. Будем искать классы, связанные с SMS, а именно класс SMSManager, описанный в документации к Android SDK.  Результаты, полученные после поиска по ключевому слову “sms”, показаны на рисунке 3.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/andr_03.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Рисунок 3. Результаты поиска по слову “sms”&lt;/p&gt;
+
+&lt;p&gt;Посмотрим содержимое файла iCalendar.java. Мы увидим, что он унаследован от класса Activity. Это объясняет, почему имя класса осталось неизменным после обфускации. Все классы-activity прописываются в файле AndroidManifest, а значит обфускатор не может изменить их имена, не вызвав ошибки компиляции. 
+Вернемся к анализу кода. Автор приложения никак не маскирует вредоносный код. В данном случае мы видим использование функции sendTextMessage(), принимающую в качестве параметров, кроме всего прочего, номер получателя и текст сообщения.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/andr_04.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt; &lt;/p&gt;
+
+&lt;p&gt;Рисунок 4. Фрагмент вредоносного кода.&lt;/p&gt;
+
+&lt;p&gt;Анализируя фрагмент, представленный на рисунке 4, можно смело утверждать, что за отправку SMS сообщения на указанный в параметрах метода номер телефона со счета абонента будет списана неприлично большая сумма. Отсюда вытекает способ монетизации, используемый автором приложения. Ничего не подозревающий пользователь скачивает приложение-календарь, которое без его ведома отправляет SMS, принося деньги в карман разработчика. 
+Такой вид вредоносного ПО получил широкое распространение, поскольку создается за короткое время, не требует каких-либо затрат и специальных знаний. Однако существенным недостатком такого метода является тот факт, что перед установкой операционная система запросит у пользователя разрешение на весь функционал, прописанный в файле AndroidManifest. Отсюда следует вывод, что метод рассчитан прежде всего на невнимательного пользователя, не читающего предупреждений, любезно предоставленных разработчиками операционной системы Android.&lt;/p&gt;
 
 </description>
-        <pubDate>Thu, 26 Feb 2015 03:37:10 +0300</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/02/26/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/02/26/welcome-to-jekyll.html</guid>
+        <pubDate>Fri, 08 May 2015 03:37:10 +0300</pubDate>
+        <link>http://yourdomain.com/jekyll/update/2015/05/08/reverse-apk.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/05/08/reverse-apk.html</guid>
         
         
         <category>jekyll</category>
