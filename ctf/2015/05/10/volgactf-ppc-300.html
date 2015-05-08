@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>Volga CTF. Ppc300 Mathproblem - right up</title>
+    <!--[if lte IE 8]>
+    <script src="/css/ie/html5shiv.js"></script><![endif]-->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.dropotron.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.onvisible.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/skel-layers.min.js"></script>
+    <script src="/js/init.js"></script>
+    <noscript>
+	<link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/skel.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/style-desktop.css"/>
+        <link rel="stylesheet" href="/css/style-noscript.css"/>
+    </noscript>
+</head>
+
+<body class="no-sidebar">
+<!-- Header -->
+<div id="header">
+
+    <!-- Inner -->
+    <div class="inner">
+        <header>
+            <h1><a href="/index.html" id="logo">PrimankaDEN</a></h1>
+        </header>
+    </div>
+
+    <!-- Nav -->
+<nav id="nav">
+    <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/ctf.html">CTF</a></li>
+        <li><a href="/about.html">About</a></li>
+    </ul>
+</nav>
+
+</div>
+
+<div class="wrapper style1">
+    <div class="container">
+        <!-- Main -->
+<header>
+    <h2 class="post-title">Volga CTF. Ppc300 Mathproblem - right up</h2>
+
+    <h1><p class="post-meta">May 10, 2015</p></h1>
+</header>
+<p>Task:<br />
+mathproblem<br />
+nc mathproblem.2015.volgactf.ru 8888<br /><br />
+After connect we see following:<br />
+<b>Greetings, neonate! Let us check if you can solve one particular problem!<br />
+You’re given a set of integer numbers x0,x1,…,xn and y. Using parenthesis ‘(‘ and ‘)’ and regular arithmetic operations ‘<em>’,’/’,’+’,’-‘ over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.<br />
+E.g. if the problem says ‘137 421 700 746 equals 1395’ your solution may look like this ‘(700-421)</em>(746/137)’.<br />
+N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)<em>(746/137) != (700-421)</em>746/137.</b><br /><br />
+Code:<br />
+import math
+import socket
+import itertools
+from time import sleep</p>
+
+<p>def mathpr():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((“mathproblem.2015.volgactf.ru”, 8888))
+    data = s.recv(1024)
+    print data
+    while 1:
+        sleep(0.1)
+        data = s.recv(1024)
+        print data
+        var = data.split(‘Solve!\n’)
+        var = var[1].split(‘ equals ‘)
+        nums = var[0].split(‘ ‘)
+        for n in range(4):
+            nums[n] = int(nums[n], 10)
+        res = var[1]
+        num = list(itertools.permutations([nums[0], nums[1], nums[2], nums[3]]))
+        ops = list(itertools.product([’+’, ‘-‘, ‘<em>’, ‘/’], repeat=3))
+        por = list(itertools.permutations([0, 1, 2]))
+        print res
+        print num
+        print ops
+        print por
+        for n in num:
+            for o in ops:
+                for p in por:
+                    curN = list(n)
+                    curO = list(o)
+                    curP = list(p)
+                    for i in range(3):
+                        curOpNum = curP.index(0)
+                        n1 = curN[curOpNum]
+                        n2 = curN[curOpNum + 1]
+                        resN = 0
+                        if curO[curOpNum] == ‘</em>’:
+                            resN = n1 * n2
+                        if curO[curOpNum] == ‘/’:
+                            if n2 == 0:
+                                break
+                            resN = n1 / n2
+                        if curO[curOpNum] == ‘-‘:
+                            resN = n1 - n2
+                        if curO[curOpNum] == ‘+’:
+                            resN = n1 + n2
+                        curN[curOpNum] = resN
+                        curN.pop(curOpNum + 1)
+                        curO.pop(curOpNum)
+                        curP.pop(curOpNum)
+                        for b in range(len(curP)):
+                            curP[b] -= 1
+                    if int(res) == int(curN[0]):
+                        numZero = list(p).index(0)
+                        resres = ‘(‘ + str(n[numZero]) + o[numZero] + str(n[numZero + 1]) + ‘)’</p>
+
+<pre><code>                    numOne = list(p).index(1)
+                    if math.fabs(numOne-numZero)==2:
+                        resres2 = '(' + str(n[numOne]) + o[numOne] + str(n[numOne + 1]) + ')'
+                        if (numOne&gt;numZero):
+                            resres= resres+o[list(p).index(2)]+resres2
+                        else :
+                            resres= resres2+o[list(p).index(2)]+resres
+                    else:
+                        if (numOne&gt;numZero):
+                            resres = '('+resres+o[numOne]+str(n[numOne+1])+')'
+                        else:
+                            resres = '('+str(n[numOne])+o[numOne]+resres+')'
+
+                        numTwo = list(p).index(2)
+                        if (numTwo&gt;numOne):
+                            resres = '('+resres+o[numTwo]+str(n[numTwo+1])+')'
+                        else:
+                            resres = '('+str(n[numTwo])+o[numTwo]+resres+')'
+
+    print resres
+    s.send(resres)
+s.close() mathpr()
+</code></pre>
+
+<p>Earch round it prints next:<br />
+# Round 8. Solve!<br />
+# 152 680 796 862 equals 796<br /><br />
+and send:<br />
+# (((862/680)/152)+796)<br /><br />
+After 30 rounds:<br />
+# That’s incredible! You’ve passed! Here’s your flag: <b>{you_count_as_fast_as_a_calculator}</b><br />
+# Farewell!</p>
+
+
+    </div>
+</div>
+<!-- Footer -->
+<div id="footer">
+    <!-- Contact -->
+    <section class="contact">
+        <ul class="icons">
+            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+            <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+            <li><a href="" class="icon fa-linkedin"><span class="label">Linkedin</span></a></li>
+        </ul>
+    </section>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <ul class="menu">
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            <li>&copy;2015 PrimankaDEN</li>
+            <li><a href="https://github.com/PrimankaDEN/primankaden.github.io.git">Source</a></li>
+            <li><a href="/feed.xml">via RSS</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
