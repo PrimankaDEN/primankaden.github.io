@@ -6,9 +6,120 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 08 May 2015 01:43:58 +0300</pubDate>
-    <lastBuildDate>Fri, 08 May 2015 01:43:58 +0300</lastBuildDate>
+    <pubDate>Sat, 09 May 2015 00:29:55 +0300</pubDate>
+    <lastBuildDate>Sat, 09 May 2015 00:29:55 +0300</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Volga CTF. Ppc300 Mathproblem - right up</title>
+        <description>&lt;p&gt;Task:&lt;br /&gt;
+mathproblem&lt;br /&gt;
+nc mathproblem.2015.volgactf.ru 8888&lt;br /&gt;&lt;br /&gt;
+After connect we see following:&lt;br /&gt;
+&lt;b&gt;Greetings, neonate! Let us check if you can solve one particular problem!&lt;br /&gt;
+You’re given a set of integer numbers x0,x1,…,xn and y. Using parenthesis ‘(‘ and ‘)’ and regular arithmetic operations ‘&lt;em&gt;’,’/’,’+’,’-‘ over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.&lt;br /&gt;
+E.g. if the problem says ‘137 421 700 746 equals 1395’ your solution may look like this ‘(700-421)&lt;/em&gt;(746/137)’.&lt;br /&gt;
+N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)&lt;em&gt;(746/137) != (700-421)&lt;/em&gt;746/137.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;
+Code:&lt;br /&gt;
+import math
+import socket
+import itertools
+from time import sleep&lt;/p&gt;
+
+&lt;p&gt;def mathpr():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((“mathproblem.2015.volgactf.ru”, 8888))
+    data = s.recv(1024)
+    print data
+    while 1:
+        sleep(0.1)
+        data = s.recv(1024)
+        print data
+        var = data.split(‘Solve!\n’)
+        var = var[1].split(‘ equals ‘)
+        nums = var[0].split(‘ ‘)
+        for n in range(4):
+            nums[n] = int(nums[n], 10)
+        res = var[1]
+        num = list(itertools.permutations([nums[0], nums[1], nums[2], nums[3]]))
+        ops = list(itertools.product([’+’, ‘-‘, ‘&lt;em&gt;’, ‘/’], repeat=3))
+        por = list(itertools.permutations([0, 1, 2]))
+        print res
+        print num
+        print ops
+        print por
+        for n in num:
+            for o in ops:
+                for p in por:
+                    curN = list(n)
+                    curO = list(o)
+                    curP = list(p)
+                    for i in range(3):
+                        curOpNum = curP.index(0)
+                        n1 = curN[curOpNum]
+                        n2 = curN[curOpNum + 1]
+                        resN = 0
+                        if curO[curOpNum] == ‘&lt;/em&gt;’:
+                            resN = n1 * n2
+                        if curO[curOpNum] == ‘/’:
+                            if n2 == 0:
+                                break
+                            resN = n1 / n2
+                        if curO[curOpNum] == ‘-‘:
+                            resN = n1 - n2
+                        if curO[curOpNum] == ‘+’:
+                            resN = n1 + n2
+                        curN[curOpNum] = resN
+                        curN.pop(curOpNum + 1)
+                        curO.pop(curOpNum)
+                        curP.pop(curOpNum)
+                        for b in range(len(curP)):
+                            curP[b] -= 1
+                    if int(res) == int(curN[0]):
+                        numZero = list(p).index(0)
+                        resres = ‘(‘ + str(n[numZero]) + o[numZero] + str(n[numZero + 1]) + ‘)’&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;                    numOne = list(p).index(1)
+                    if math.fabs(numOne-numZero)==2:
+                        resres2 = '(' + str(n[numOne]) + o[numOne] + str(n[numOne + 1]) + ')'
+                        if (numOne&amp;gt;numZero):
+                            resres= resres+o[list(p).index(2)]+resres2
+                        else :
+                            resres= resres2+o[list(p).index(2)]+resres
+                    else:
+                        if (numOne&amp;gt;numZero):
+                            resres = '('+resres+o[numOne]+str(n[numOne+1])+')'
+                        else:
+                            resres = '('+str(n[numOne])+o[numOne]+resres+')'
+
+                        numTwo = list(p).index(2)
+                        if (numTwo&amp;gt;numOne):
+                            resres = '('+resres+o[numTwo]+str(n[numTwo+1])+')'
+                        else:
+                            resres = '('+str(n[numTwo])+o[numTwo]+resres+')'
+
+    print resres
+    s.send(resres)
+s.close() mathpr()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Earch round it prints next:&lt;br /&gt;
+# Round 8. Solve!&lt;br /&gt;
+# 152 680 796 862 equals 796&lt;br /&gt;&lt;br /&gt;
+and send:&lt;br /&gt;
+# (((862/680)/152)+796)&lt;br /&gt;&lt;br /&gt;
+After 30 rounds:&lt;br /&gt;
+# That’s incredible! You’ve passed! Here’s your flag: &lt;b&gt;{you_count_as_fast_as_a_calculator}&lt;/b&gt;&lt;br /&gt;
+# Farewell!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 May 2015 03:00:00 +0300</pubDate>
+        <link>http://yourdomain.com/ctf/2015/05/10/volgactf-ppc-300.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/ctf/2015/05/10/volgactf-ppc-300.html</guid>
+        
+        
+        <category>ctf</category>
+        
+      </item>
     
       <item>
         <title>Volga CTF. Stego400 - right up</title>
@@ -19,7 +130,7 @@ Hints:&lt;br /&gt;
    * 2x3 matrix embedding.&lt;br /&gt;
    * Jessica Fridrich would solve this task easily.&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_lsb.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;
+&lt;p&gt;&lt;a class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_lsb.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;
 &lt;br /&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Image&lt;/span&gt;
@@ -56,16 +167,14 @@ Hints:&lt;br /&gt;
 
 &lt;p&gt;&lt;br /&gt;
 Result:&lt;br /&gt;
-&lt;a href=&quot;#&quot; class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_result.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_result.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 08 May 2015 03:37:10 +0300</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/05/08/volgactf-stego-400.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/05/08/volgactf-stego-400.html</guid>
+        <link>http://yourdomain.com/ctf/2015/05/08/volgactf-stego-400.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/ctf/2015/05/08/volgactf-stego-400.html</guid>
         
         
-        <category>jekyll</category>
-        
-        <category>update</category>
+        <category>ctf</category>
         
       </item>
     

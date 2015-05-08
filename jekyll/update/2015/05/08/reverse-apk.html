@@ -1,58 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
-    <title>Реверс APK на примере несложной малвари</title>
-    <!--[if lte IE 8]>
-    <script src="/css/ie/html5shiv.js"></script><![endif]-->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.dropotron.min.js"></script>
-    <script src="/js/jquery.scrolly.min.js"></script>
-    <script src="/js/jquery.onvisible.min.js"></script>
-    <script src="/js/skel.min.js"></script>
-    <script src="/js/skel-layers.min.js"></script>
-    <script src="/js/init.js"></script>
-    <noscript>
-        <link rel="stylesheet" href="/css/skel.css"/>
-        <link rel="stylesheet" href="/css/style.css"/>
-        <link rel="stylesheet" href="/css/style-desktop.css"/>
-        <link rel="stylesheet" href="/css/style-noscript.css"/>
-    </noscript>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Реверс APK на примере несложной малвари</title>
+  <meta name="description" content="Вредоносный код для мобильных устройств часто рассматривается как миф из-за ограничений аппаратного и программного обеспечения. Тем не менее, история показыв...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/jekyll/update/2015/05/08/reverse-apk.html">
+  <link rel="alternate" type="application/rss+xml" title="" href="http://yourdomain.com/feed.xml" />
 </head>
 
-<body class="no-sidebar">
-<!-- Header -->
-<div id="header">
 
-    <!-- Inner -->
-    <div class="inner">
-        <header>
-            <h1><a href="/index.html" id="logo">PrimankaDEN</a></h1>
-        </header>
-    </div>
+  <body>
 
-    <!-- Nav -->
-<nav id="nav">
-    <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/ctf.html">CTF</a></li>
-        <li><a href="/about.html">About</a></li>
-    </ul>
-</nav>
+    <header class="site-header">
 
-</div>
+  <div class="wrapper">
 
-<div class="wrapper style1">
-    <div class="container">
-        <!-- Main -->
-<header>
-    <h2 class="post-title">Реверс APK на примере несложной малвари</h2>
+    <a class="site-title" href="/"></a>
 
-    <h1><p class="post-meta">May 8, 2015</p></h1>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
 </header>
-<p>Вредоносный код для мобильных устройств часто рассматривается как миф из-за ограничений аппаратного и программного обеспечения. 
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Реверс APK на примере несложной малвари</h1>
+    <p class="post-meta">May 8, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <p>Вредоносный код для мобильных устройств часто рассматривается как миф из-за ограничений аппаратного и программного обеспечения. 
 Тем не менее, история показывает, что мобильные устройства также подвержены такого рода угрозам.
 Рассмотрим исследование вредоносного кода на примере приложения iCalendar для мобильной операционной системы Android. Это приложение, полученное в формате APK, было найдено на одном из сайтов, распространяющих “варезное” ПО. 
 Формат Android Package (APK) представляет собой незашифрованный архив, содержащий в себе метаинформацию о приложении, байт код, а также медиаресурсы (иконки, строки, xml разметки). Для получения доступа к этим файлам воспользуемся утилитой apktools, распространяемой бесплатно, запустив ее с параметром -d.  После исполнения программы, получим следующую директорию, показанную на рисунке 1.</p>
@@ -95,33 +105,46 @@
 Такой вид вредоносного ПО получил широкое распространение, поскольку создается за короткое время, не требует каких-либо затрат и специальных знаний. Однако существенным недостатком такого метода является тот факт, что перед установкой операционная система запросит у пользователя разрешение на весь функционал, прописанный в файле AndroidManifest. Отсюда следует вывод, что метод рассчитан прежде всего на невнимательного пользователя, не читающего предупреждений, любезно предоставленных разработчиками операционной системы Android.</p>
 
 
+  </article>
 
-    </div>
-</div>
-<!-- Footer -->
-<div id="footer">
-    <!-- Contact -->
-    <section class="contact">
-        <ul class="icons">
-            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-            <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
-            <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
-            <li><a href="" class="icon fa-linkedin"><span class="label">Linkedin</span></a></li>
-        </ul>
-    </section>
-
-    <!-- Copyright -->
-    <div class="copyright">
-        <ul class="menu">
-            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-            <li>&copy;2015 PrimankaDEN</li>
-            <li><a href="https://github.com/PrimankaDEN/primankaden.github.io.git">Source</a></li>
-            <li><a href="/feed.xml">via RSS</a></li>
-        </ul>
-    </div>
 </div>
 
-</body>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading"></h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li></li>
+          <li><a href="mailto:"></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
 </html>
