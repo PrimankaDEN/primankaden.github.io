@@ -7,11 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Volga CTF. Ppc300 Mathproblem - right up</title>
-  <meta name="description" content="Task:mathproblemnc mathproblem.2015.volgactf.ru 8888After connect we see following:Greetings, neonate! Let us check if you can solve one particular problem!Y...">
+  <meta name="description" content="Task:mathproblemnc mathproblem.2015.volgactf.ru 8888After connect we see following:Greetings, neonate! Let us check if you can solve one particular problem!&...">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://yourdomain.com/ctf/2015/05/10/volgactf-ppc-300.html">
-  <link rel="alternate" type="application/rss+xml" title="" href="http://yourdomain.com/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="PrimankaDEN" href="http://yourdomain.com/feed.xml" />
 </head>
 
 
@@ -21,7 +21,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="/"></a>
+    <a class="site-title" href="/">PrimankaDEN</a>
 
     <nav class="site-nav">
       <a href="#" class="menu-icon">
@@ -65,102 +65,114 @@
     <p>Task:<br />
 mathproblem<br />
 nc mathproblem.2015.volgactf.ru 8888<br /><br />
-After connect we see following:<br />
-<b>Greetings, neonate! Let us check if you can solve one particular problem!<br />
-You’re given a set of integer numbers x0,x1,…,xn and y. Using parenthesis ‘(‘ and ‘)’ and regular arithmetic operations ‘<em>’,’/’,’+’,’-‘ over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.<br />
-E.g. if the problem says ‘137 421 700 746 equals 1395’ your solution may look like this ‘(700-421)</em>(746/137)’.<br />
-N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)<em>(746/137) != (700-421)</em>746/137.</b><br /><br />
-Code:<br />
-import math
-import socket
-import itertools
-from time import sleep</p>
+After connect we see following:<br /></p>
 
-<p>def mathpr():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((“mathproblem.2015.volgactf.ru”, 8888))
-    data = s.recv(1024)
-    print data
-    while 1:
-        sleep(0.1)
-        data = s.recv(1024)
-        print data
-        var = data.split(‘Solve!\n’)
-        var = var[1].split(‘ equals ‘)
-        nums = var[0].split(‘ ‘)
-        for n in range(4):
-            nums[n] = int(nums[n], 10)
-        res = var[1]
-        num = list(itertools.permutations([nums[0], nums[1], nums[2], nums[3]]))
-        ops = list(itertools.product([’+’, ‘-‘, ‘<em>’, ‘/’], repeat=3))
-        por = list(itertools.permutations([0, 1, 2]))
-        print res
-        print num
-        print ops
-        print por
-        for n in num:
-            for o in ops:
-                for p in por:
-                    curN = list(n)
-                    curO = list(o)
-                    curP = list(p)
-                    for i in range(3):
-                        curOpNum = curP.index(0)
-                        n1 = curN[curOpNum]
-                        n2 = curN[curOpNum + 1]
-                        resN = 0
-                        if curO[curOpNum] == ‘</em>’:
-                            resN = n1 * n2
-                        if curO[curOpNum] == ‘/’:
-                            if n2 == 0:
-                                break
-                            resN = n1 / n2
-                        if curO[curOpNum] == ‘-‘:
-                            resN = n1 - n2
-                        if curO[curOpNum] == ‘+’:
-                            resN = n1 + n2
-                        curN[curOpNum] = resN
-                        curN.pop(curOpNum + 1)
-                        curO.pop(curOpNum)
-                        curP.pop(curOpNum)
-                        for b in range(len(curP)):
-                            curP[b] -= 1
-                    if int(res) == int(curN[0]):
-                        numZero = list(p).index(0)
-                        resres = ‘(‘ + str(n[numZero]) + o[numZero] + str(n[numZero + 1]) + ‘)’</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Greetings, neonate! Let us check if you can solve one particular problem!&lt;br&gt;
+You&#39;re given a set of integer numbers x0,x1,...,xn and y. Using parenthesis &#39;(&#39; and &#39;)&#39; and regular arithmetic operations &#39;*&#39;,&#39;/&#39;,&#39;+&#39;,&#39;-&#39; over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.
+E.g. if the problem says &#39;137 421 700 746 equals 1395&#39; your solution may look like this &#39;(700-421)*(746/137)&#39;.
+N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)*(746/137) != (700-421)*746/137.</code></pre></div>
 
-<pre><code>                    numOne = list(p).index(1)
-                    if math.fabs(numOne-numZero)==2:
-                        resres2 = '(' + str(n[numOne]) + o[numOne] + str(n[numOne + 1]) + ')'
-                        if (numOne&gt;numZero):
-                            resres= resres+o[list(p).index(2)]+resres2
-                        else :
-                            resres= resres2+o[list(p).index(2)]+resres
-                    else:
-                        if (numOne&gt;numZero):
-                            resres = '('+resres+o[numOne]+str(n[numOne+1])+')'
-                        else:
-                            resres = '('+str(n[numOne])+o[numOne]+resres+')'
+<p>Code:<br /></p>
 
-                        numTwo = list(p).index(2)
-                        if (numTwo&gt;numOne):
-                            resres = '('+resres+o[numTwo]+str(n[numTwo+1])+')'
-                        else:
-                            resres = '('+str(n[numTwo])+o[numTwo]+resres+')'
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
-    print resres
-    s.send(resres)
-s.close() mathpr()
-</code></pre>
+<span class="k">def</span> <span class="nf">mathpr</span><span class="p">():</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s">&quot;mathproblem.2015.volgactf.ru&quot;</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">data</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">data</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;Solve!</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; equals &#39;</span><span class="p">)</span>
+        <span class="n">nums</span> <span class="o">=</span> <span class="n">var</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">([</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="mi">3</span><span class="p">]]))</span>
+        <span class="n">ops</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="s">&#39;+&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">por</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+        <span class="k">print</span> <span class="n">res</span>
+        <span class="k">print</span> <span class="n">num</span>
+        <span class="k">print</span> <span class="n">ops</span>
+        <span class="k">print</span> <span class="n">por</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">num</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">por</span><span class="p">:</span>
+                    <span class="n">curN</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="n">curO</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+                    <span class="n">curP</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                        <span class="n">curOpNum</span> <span class="o">=</span> <span class="n">curP</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">n1</span> <span class="o">=</span> <span class="n">curN</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span>
+                        <span class="n">n2</span> <span class="o">=</span> <span class="n">curN</span><span class="p">[</span><span class="n">curOpNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="n">resN</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">if</span> <span class="n">curO</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;*&#39;</span><span class="p">:</span>
+                            <span class="n">resN</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">*</span> <span class="n">n2</span>
+                        <span class="k">if</span> <span class="n">curO</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;/&#39;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">n2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="k">break</span>
+                            <span class="n">resN</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">/</span> <span class="n">n2</span>
+                        <span class="k">if</span> <span class="n">curO</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;-&#39;</span><span class="p">:</span>
+                            <span class="n">resN</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">-</span> <span class="n">n2</span>
+                        <span class="k">if</span> <span class="n">curO</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;+&#39;</span><span class="p">:</span>
+                            <span class="n">resN</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span>
+                        <span class="n">curN</span><span class="p">[</span><span class="n">curOpNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">resN</span>
+                        <span class="n">curN</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">curOpNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">curO</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">curOpNum</span><span class="p">)</span>
+                        <span class="n">curP</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">curOpNum</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">curP</span><span class="p">)):</span>
+                            <span class="n">curP</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">curN</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                        <span class="n">numZero</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">resres</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numZero</span><span class="p">])</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numZero</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numZero</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
 
-<p>Earch round it prints next:<br />
-# Round 8. Solve!<br />
-# 152 680 796 862 equals 796<br /><br />
-and send:<br />
-# (((862/680)/152)+796)<br /><br />
-After 30 rounds:<br />
-# That’s incredible! You’ve passed! Here’s your flag: <b>{you_count_as_fast_as_a_calculator}</b><br />
-# Farewell!</p>
+                        <span class="n">numOne</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">numOne</span> <span class="o">-</span> <span class="n">numZero</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">resres2</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numOne</span><span class="p">])</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numOne</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numOne</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">numOne</span> <span class="o">&gt;</span> <span class="n">numZero</span><span class="p">):</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="n">resres</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span> <span class="o">+</span> <span class="n">resres2</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="n">resres2</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span> <span class="o">+</span> <span class="n">resres</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">numOne</span> <span class="o">&gt;</span> <span class="n">numZero</span><span class="p">):</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">resres</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numOne</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numOne</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numOne</span><span class="p">])</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numOne</span><span class="p">]</span> <span class="o">+</span> <span class="n">resres</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+
+                            <span class="n">numTwo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">numTwo</span> <span class="o">&gt;</span> <span class="n">numOne</span><span class="p">):</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">resres</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numTwo</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numTwo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">resres</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">numTwo</span><span class="p">])</span> <span class="o">+</span> <span class="n">o</span><span class="p">[</span><span class="n">numTwo</span><span class="p">]</span> <span class="o">+</span> <span class="n">resres</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+
+        <span class="k">print</span> <span class="n">resres</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">resres</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">mathpr</span><span class="p">()</span></code></pre></div>
+
+<p>Earch round it prints next:<br /></p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text"># Round 8. Solve!
+# 152 680 796 862 equals 796
+#
+# 796
+#
+# [(152, 680, 796, 862), (152, 680, 862, 796), (152, 796, 680, 862), (152, 796, 862, 680), (152, 862, 680, 796), (152, 862, 796, 680), (680, 152, 796, 862), (680, 152, 862, 796), (680, 796, 152, 862), (680, 796, 862, 152), (680, 862, 152, 796), (680, 862, 796, 152), (796, 152, 680, 862), (796, 152, 862, 680), (796, 680, 152, 862), (796, 680, 862, 152), (796, 862, 152, 680), (796, 862, 680, 152), (862, 152, 680, 796), (862, 152, 796, 680), (862, 680, 152, 796), (862, 680, 796, 152), (862, 796, 152, 680), (862, 796, 680, 152)]
+# [(&#39;+&#39;, &#39;+&#39;, &#39;+&#39;), (&#39;+&#39;, &#39;+&#39;, &#39;-&#39;), (&#39;+&#39;, &#39;+&#39;, &#39;*&#39;), (&#39;+&#39;, &#39;+&#39;, &#39;/&#39;), (&#39;+&#39;, &#39;-&#39;, &#39;+&#39;), (&#39;+&#39;, &#39;-&#39;, &#39;-&#39;), (&#39;+&#39;, &#39;-&#39;, &#39;*&#39;), (&#39;+&#39;, &#39;-&#39;, &#39;/&#39;), (&#39;+&#39;, &#39;*&#39;, &#39;+&#39;), (&#39;+&#39;, &#39;*&#39;, &#39;-&#39;), (&#39;+&#39;, &#39;*&#39;, &#39;*&#39;), (&#39;+&#39;, &#39;*&#39;, &#39;/&#39;), (&#39;+&#39;, &#39;/&#39;, &#39;+&#39;), (&#39;+&#39;, &#39;/&#39;, &#39;-&#39;), (&#39;+&#39;, &#39;/&#39;, &#39;*&#39;), (&#39;+&#39;, &#39;/&#39;, &#39;/&#39;), (&#39;-&#39;, &#39;+&#39;, &#39;+&#39;), (&#39;-&#39;, &#39;+&#39;, &#39;-&#39;), (&#39;-&#39;, &#39;+&#39;, &#39;*&#39;), (&#39;-&#39;, &#39;+&#39;, &#39;/&#39;), (&#39;-&#39;, &#39;-&#39;, &#39;+&#39;), (&#39;-&#39;, &#39;-&#39;, &#39;-&#39;), (&#39;-&#39;, &#39;-&#39;, &#39;*&#39;), (&#39;-&#39;, &#39;-&#39;, &#39;/&#39;), (&#39;-&#39;, &#39;*&#39;, &#39;+&#39;), (&#39;-&#39;, &#39;*&#39;, &#39;-&#39;), (&#39;-&#39;, &#39;*&#39;, &#39;*&#39;), (&#39;-&#39;, &#39;*&#39;, &#39;/&#39;), (&#39;-&#39;, &#39;/&#39;, &#39;+&#39;), (&#39;-&#39;, &#39;/&#39;, &#39;-&#39;), (&#39;-&#39;, &#39;/&#39;, &#39;*&#39;), (&#39;-&#39;, &#39;/&#39;, &#39;/&#39;), (&#39;*&#39;, &#39;+&#39;, &#39;+&#39;), (&#39;*&#39;, &#39;+&#39;, &#39;-&#39;), (&#39;*&#39;, &#39;+&#39;, &#39;*&#39;), (&#39;*&#39;, &#39;+&#39;, &#39;/&#39;), (&#39;*&#39;, &#39;-&#39;, &#39;+&#39;), (&#39;*&#39;, &#39;-&#39;, &#39;-&#39;), (&#39;*&#39;, &#39;-&#39;, &#39;*&#39;), (&#39;*&#39;, &#39;-&#39;, &#39;/&#39;), (&#39;*&#39;, &#39;*&#39;, &#39;+&#39;), (&#39;*&#39;, &#39;*&#39;, &#39;-&#39;), (&#39;*&#39;, &#39;*&#39;, &#39;*&#39;), (&#39;*&#39;, &#39;*&#39;, &#39;/&#39;), (&#39;*&#39;, &#39;/&#39;, &#39;+&#39;), (&#39;*&#39;, &#39;/&#39;, &#39;-&#39;), (&#39;*&#39;, &#39;/&#39;, &#39;*&#39;), (&#39;*&#39;, &#39;/&#39;, &#39;/&#39;), (&#39;/&#39;, &#39;+&#39;, &#39;+&#39;), (&#39;/&#39;, &#39;+&#39;, &#39;-&#39;), (&#39;/&#39;, &#39;+&#39;, &#39;*&#39;), (&#39;/&#39;, &#39;+&#39;, &#39;/&#39;), (&#39;/&#39;, &#39;-&#39;, &#39;+&#39;), (&#39;/&#39;, &#39;-&#39;, &#39;-&#39;), (&#39;/&#39;, &#39;-&#39;, &#39;*&#39;), (&#39;/&#39;, &#39;-&#39;, &#39;/&#39;), (&#39;/&#39;, &#39;*&#39;, &#39;+&#39;), (&#39;/&#39;, &#39;*&#39;, &#39;-&#39;), (&#39;/&#39;, &#39;*&#39;, &#39;*&#39;), (&#39;/&#39;, &#39;*&#39;, &#39;/&#39;), (&#39;/&#39;, &#39;/&#39;, &#39;+&#39;), (&#39;/&#39;, &#39;/&#39;, &#39;-&#39;), (&#39;/&#39;, &#39;/&#39;, &#39;*&#39;), (&#39;/&#39;, &#39;/&#39;, &#39;/&#39;)]
+# [(0, 1, 2), (0, 2, 1), (1, 0, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0)]
+# (((862/680)/152)+796)</code></pre></div>
+
+<p>After 30 rounds:<br /></p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text"># That&#39;s incredible! You&#39;ve passed! Here&#39;s your flag: {you_count_as_fast_as_a_calculator}
+# Farewell!</code></pre></div>
+
 
   </article>
 
@@ -173,18 +185,30 @@ After 30 rounds:<br />
 
   <div class="wrapper">
 
-    <h2 class="footer-heading"></h2>
+    <h2 class="footer-heading">PrimankaDEN</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col  footer-col-1">
         <ul class="contact-list">
-          <li></li>
-          <li><a href="mailto:"></a></li>
+          <li>PrimankaDEN</li>
+          <li><a href="mailto:denisknyazev.gm@gmail.com">denisknyazev.gm@gmail.com</a></li>
         </ul>
       </div>
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/PrimankaDEN" target="_blank">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">PrimankaDEN</span>
+            </a>
+          </li>
           
 
           

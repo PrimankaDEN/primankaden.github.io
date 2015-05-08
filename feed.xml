@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
+    <title>PrimankaDEN</title>
     <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 09 May 2015 00:29:55 +0300</pubDate>
-    <lastBuildDate>Sat, 09 May 2015 00:29:55 +0300</lastBuildDate>
+    <pubDate>Sat, 09 May 2015 01:11:39 +0300</pubDate>
+    <lastBuildDate>Sat, 09 May 2015 01:11:39 +0300</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -15,102 +15,114 @@
         <description>&lt;p&gt;Task:&lt;br /&gt;
 mathproblem&lt;br /&gt;
 nc mathproblem.2015.volgactf.ru 8888&lt;br /&gt;&lt;br /&gt;
-After connect we see following:&lt;br /&gt;
-&lt;b&gt;Greetings, neonate! Let us check if you can solve one particular problem!&lt;br /&gt;
-You’re given a set of integer numbers x0,x1,…,xn and y. Using parenthesis ‘(‘ and ‘)’ and regular arithmetic operations ‘&lt;em&gt;’,’/’,’+’,’-‘ over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.&lt;br /&gt;
-E.g. if the problem says ‘137 421 700 746 equals 1395’ your solution may look like this ‘(700-421)&lt;/em&gt;(746/137)’.&lt;br /&gt;
-N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)&lt;em&gt;(746/137) != (700-421)&lt;/em&gt;746/137.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;
-Code:&lt;br /&gt;
-import math
-import socket
-import itertools
-from time import sleep&lt;/p&gt;
+After connect we see following:&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;def mathpr():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((“mathproblem.2015.volgactf.ru”, 8888))
-    data = s.recv(1024)
-    print data
-    while 1:
-        sleep(0.1)
-        data = s.recv(1024)
-        print data
-        var = data.split(‘Solve!\n’)
-        var = var[1].split(‘ equals ‘)
-        nums = var[0].split(‘ ‘)
-        for n in range(4):
-            nums[n] = int(nums[n], 10)
-        res = var[1]
-        num = list(itertools.permutations([nums[0], nums[1], nums[2], nums[3]]))
-        ops = list(itertools.product([’+’, ‘-‘, ‘&lt;em&gt;’, ‘/’], repeat=3))
-        por = list(itertools.permutations([0, 1, 2]))
-        print res
-        print num
-        print ops
-        print por
-        for n in num:
-            for o in ops:
-                for p in por:
-                    curN = list(n)
-                    curO = list(o)
-                    curP = list(p)
-                    for i in range(3):
-                        curOpNum = curP.index(0)
-                        n1 = curN[curOpNum]
-                        n2 = curN[curOpNum + 1]
-                        resN = 0
-                        if curO[curOpNum] == ‘&lt;/em&gt;’:
-                            resN = n1 * n2
-                        if curO[curOpNum] == ‘/’:
-                            if n2 == 0:
-                                break
-                            resN = n1 / n2
-                        if curO[curOpNum] == ‘-‘:
-                            resN = n1 - n2
-                        if curO[curOpNum] == ‘+’:
-                            resN = n1 + n2
-                        curN[curOpNum] = resN
-                        curN.pop(curOpNum + 1)
-                        curO.pop(curOpNum)
-                        curP.pop(curOpNum)
-                        for b in range(len(curP)):
-                            curP[b] -= 1
-                    if int(res) == int(curN[0]):
-                        numZero = list(p).index(0)
-                        resres = ‘(‘ + str(n[numZero]) + o[numZero] + str(n[numZero + 1]) + ‘)’&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;Greetings, neonate! Let us check if you can solve one particular problem!&amp;lt;br&amp;gt;
+You&amp;#39;re given a set of integer numbers x0,x1,...,xn and y. Using parenthesis &amp;#39;(&amp;#39; and &amp;#39;)&amp;#39; and regular arithmetic operations &amp;#39;*&amp;#39;,&amp;#39;/&amp;#39;,&amp;#39;+&amp;#39;,&amp;#39;-&amp;#39; over integer numbers you need to find a mathematical expression that involves each and every xi and evaluates to y. Sending the correct expression advances you to the next round.
+E.g. if the problem says &amp;#39;137 421 700 746 equals 1395&amp;#39; your solution may look like this &amp;#39;(700-421)*(746/137)&amp;#39;.
+N.b. Division operation is done according to regular integer division rules, so 746/137 == 5 and (700-421)*(746/137) != (700-421)*746/137.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;pre&gt;&lt;code&gt;                    numOne = list(p).index(1)
-                    if math.fabs(numOne-numZero)==2:
-                        resres2 = '(' + str(n[numOne]) + o[numOne] + str(n[numOne + 1]) + ')'
-                        if (numOne&amp;gt;numZero):
-                            resres= resres+o[list(p).index(2)]+resres2
-                        else :
-                            resres= resres2+o[list(p).index(2)]+resres
-                    else:
-                        if (numOne&amp;gt;numZero):
-                            resres = '('+resres+o[numOne]+str(n[numOne+1])+')'
-                        else:
-                            resres = '('+str(n[numOne])+o[numOne]+resres+')'
+&lt;p&gt;Code:&lt;br /&gt;&lt;/p&gt;
 
-                        numTwo = list(p).index(2)
-                        if (numTwo&amp;gt;numOne):
-                            resres = '('+resres+o[numTwo]+str(n[numTwo+1])+')'
-                        else:
-                            resres = '('+str(n[numTwo])+o[numTwo]+resres+')'
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;math&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;socket&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;itertools&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;
 
-    print resres
-    s.send(resres)
-s.close() mathpr()
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mathpr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AF_INET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SOCK_STREAM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mathproblem.2015.volgactf.ru&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8888&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1024&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1024&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Solve!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39; equals &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itertools&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permutations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ops&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itertools&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;+&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;por&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itertools&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permutations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ops&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;por&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ops&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;por&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;curP&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;+&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resN&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;curO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;curP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curOpNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;curP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
 
-&lt;p&gt;Earch round it prints next:&lt;br /&gt;
-# Round 8. Solve!&lt;br /&gt;
-# 152 680 796 862 equals 796&lt;br /&gt;&lt;br /&gt;
-and send:&lt;br /&gt;
-# (((862/680)/152)+796)&lt;br /&gt;&lt;br /&gt;
-After 30 rounds:&lt;br /&gt;
-# That’s incredible! You’ve passed! Here’s your flag: &lt;b&gt;{you_count_as_fast_as_a_calculator}&lt;/b&gt;&lt;br /&gt;
-# Farewell!&lt;/p&gt;
+                        &lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fabs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;resres2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres2&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numZero&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+
+                            &lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+                            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numTwo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resres&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mathpr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Earch round it prints next:&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# Round 8. Solve!
+# 152 680 796 862 equals 796
+#
+# 796
+#
+# [(152, 680, 796, 862), (152, 680, 862, 796), (152, 796, 680, 862), (152, 796, 862, 680), (152, 862, 680, 796), (152, 862, 796, 680), (680, 152, 796, 862), (680, 152, 862, 796), (680, 796, 152, 862), (680, 796, 862, 152), (680, 862, 152, 796), (680, 862, 796, 152), (796, 152, 680, 862), (796, 152, 862, 680), (796, 680, 152, 862), (796, 680, 862, 152), (796, 862, 152, 680), (796, 862, 680, 152), (862, 152, 680, 796), (862, 152, 796, 680), (862, 680, 152, 796), (862, 680, 796, 152), (862, 796, 152, 680), (862, 796, 680, 152)]
+# [(&amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;, &amp;#39;/&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;+&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;*&amp;#39;), (&amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;, &amp;#39;/&amp;#39;)]
+# [(0, 1, 2), (0, 2, 1), (1, 0, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0)]
+# (((862/680)/152)+796)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After 30 rounds:&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# That&amp;#39;s incredible! You&amp;#39;ve passed! Here&amp;#39;s your flag: {you_count_as_fast_as_a_calculator}
+# Farewell!&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 </description>
         <pubDate>Sun, 10 May 2015 03:00:00 +0300</pubDate>
         <link>http://yourdomain.com/ctf/2015/05/10/volgactf-ppc-300.html</link>
@@ -128,10 +140,9 @@ There must be a hidden message somewhere.&lt;br /&gt;
 Hints:&lt;br /&gt;
    * 2 bpp. That’s incredible.&lt;br /&gt;
    * 2x3 matrix embedding.&lt;br /&gt;
-   * Jessica Fridrich would solve this task easily.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a class=&quot;image fill&quot;&gt;&lt;img src=&quot;/files/volgactf_stego400_lsb.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;
-&lt;br /&gt;&lt;/p&gt;
+   * Jessica Fridrich would solve this task easily.&lt;br /&gt;
+&lt;a href=&quot;/files/volgactf_stego400_lsb.png&quot; target=&quot;_blank&quot;&gt;download file (2.5 MB)&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Image&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tlsb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
@@ -191,12 +202,12 @@ Result:&lt;br /&gt;
 
 &lt;p&gt;В первую очередь нас интересует файл AndroidManifest.xml. В нем содержится вся необходимая для системы служебная информация. К ней относятся список Activity (экранов приложения), сервисов и широковещательных каналов. Но в прежде всего нас интересуют разрешения (permission), которые необходимо прописать в AndroidManifest, чтобы использовать те или иные возможности операционной системы. Открыв AndroidManifest, мы увидим следующие строки:&lt;/p&gt;
 
-&lt;p&gt;&amp;lt;uses-permission android:name=”android.permission.INTERNET”/&amp;gt;&lt;br /&gt;
-&amp;lt;uses-permission android:name=”android.permission.ACCESS_COARSE_LOCATION”/&amp;gt;&lt;br /&gt;
-&amp;lt;uses-permission android:name=”android.permission.RESTART_PACKAGES”/&amp;gt;&lt;br /&gt;
-&amp;lt;uses-permission android:name=”android.permission.RECEIVE_SMS”/&amp;gt;&lt;br /&gt;
-&amp;lt;uses-permission android:name=”android.permission.SEND_SMS”/&amp;gt;&lt;br /&gt;
-&amp;lt;uses-permission android:name=”android.permission.SET_WALLPAPER”/&amp;gt;&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.INTERNET&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.ACCESS_COARSE_LOCATION&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.RESTART_PACKAGES&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.RECEIVE_SMS&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.SEND_SMS&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android.permission.SET_WALLPAPER&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Если объяснить необходимость доступа к календарю и интернету еще представляется возможным, то чтение и отправка SMS-сообщений совершенно не входят в обязанности приложения-календаря. Таким образом, взглянув на содержимое файла AndroidManifest, мы достаточно точно представляем, что нужно искать в коде.
 Теперь перейдем непосредственно к коду. Как правило, приложения для Android создаются с использованием языка Java, код которого компилируется в dex-файлы. Такие файлы легко поддаются декомпиляции. Получить исходный код приложения можно в два этапа. Сперва воспользуемся утилитой dex2jar, передав ей в качестве параметра путь до APK файла. После ее применения получаем файл вида &amp;lt;apk_name&amp;gt;_dex2jar.jar. Файл JAR (Java ARchive) — это архив, в котором содержится часть программы на языке JAVA. Второй этап декомпиляции – вытащить исходный код из фала jar. В этом поможет утилита Java Decompiler, которая после завершения работы выдаст директорию с исходным кодом проекта. Директория будет иметь вид, представленный на рисунке 2.&lt;/p&gt;
@@ -224,13 +235,11 @@ Result:&lt;br /&gt;
 
 </description>
         <pubDate>Fri, 08 May 2015 03:37:10 +0300</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/05/08/reverse-apk.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/05/08/reverse-apk.html</guid>
+        <link>http://yourdomain.com/post/2015/05/08/reverse-apk.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/post/2015/05/08/reverse-apk.html</guid>
         
         
-        <category>jekyll</category>
-        
-        <category>update</category>
+        <category>post</category>
         
       </item>
     
