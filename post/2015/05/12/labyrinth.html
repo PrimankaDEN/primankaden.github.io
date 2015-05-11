@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About</title>
-  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+  <title>Генерация лабиринта алгоритмом Крускала, его визуализация и решение</title>
+  <meta name="description" content="Вот такая забавная визуализация построения лабиринта получилась с помощью библиотеки pygame">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://yourdomain.com/about/">
+  <link rel="canonical" href="http://yourdomain.com/post/2015/05/12/labyrinth.html">
   <link rel="alternate" type="application/rss+xml" title="PrimankaDEN" href="http://yourdomain.com/feed.xml" />
 </head>
 
@@ -58,15 +57,31 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    <h1 class="post-title">Генерация лабиринта алгоритмом Крускала, его визуализация и решение</h1>
+    <p class="post-meta">May 12, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at <a href="http://jekyllrb.com/">jekyllrb.com</a></p>
+    <p>Вот такая забавная визуализация построения лабиринта получилась с помощью библиотеки <a href="http://www.pygame.org/news.html" target="_blank">pygame</a></p>
 
-<p>You can find the source code for the Jekyll new theme at: <a href="https://github.com/jglovier/jekyll-new">github.com/jglovier/jekyll-new</a></p>
+<p>Первым делом генерируется сетка, каждое ребро которой имеет рандомный вес. Хранится все это дело как список ребер, каждое имеет начальные и конечные координаты. Возможно не самый крутой способ, но в дальнейшем он сыграет на руку при реализации алгоритма Крускала. Так это выглядит после построения сетки (цвет характеризует вес ребра)</p>
 
-<p>You can find the source code for Jekyll at <a href="https://github.com/jekyll/jekyll">github.com/jekyll/jekyll</a></p>
+<p><a class="image fill"><img src="/files/labir1.png" /></a><br /></p>
+
+<p>Далее строится остовное дерево по алгоритму Крускала. Ребра сортируются в порядке убывания (можно и возрастания) весов. Далее по порядку каждое ребро добавляем в конечный граф, при этом исключая циклы. В общем, реализация точь-в-точь как <a href="https://ru.wikipedia.org/wiki/Алгоритм_Крускала" target="_blank">здесь</a>. Вот такой лабиринт имеем в итоге:</p>
+
+<p><a class="image fill"><img src="/files/labir2.png" /></a></p>
+
+<p>Решается все это дело следующим образом. Берем стартовый пиксель и закрашиваем соседние с ним пиксели (которые при этом не являются стенками) в цвет соответствующего направления, затем добавляем их в список крайних точек. Далее проделываем такую оперцию для каждой точки из списка, после чего удаляем ее. Цвет пикселя в дальнейшем позволит восстановить обратный путь.
+Так решение выглядит в процессе:</p>
+
+<p><a class="image fill"><img src="/files/labir3.png" /></a></p>
+
+<p>А это построенный путь от левого верхнего до правого нижнего края:</p>
+
+<p><a class="image fill"><img src="/files/labir4.png" /></a></p>
+
+<p>Код совершенно не оптимизирован и не причесан, написан за вечер на коленке и находится <a href="/sources/labyrinth.py" target="_blank">здесь</a>.</p>
 
   </article>
 
